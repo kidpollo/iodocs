@@ -488,6 +488,7 @@ function processRequest(req, res, next) {
         customHeaders = {},
         params = reqQuery.params || {},
         locations = reqQuery.locations || {},
+        jsonParams = reqQuery.jsonParams || {},
         methodURL = reqQuery.methodUri,
         httpMethod = reqQuery.httpMethod,
         apiKey = reqQuery.apiKey,
@@ -506,6 +507,18 @@ function processRequest(req, res, next) {
             {
                 customHeaders[param] = params[param];
                 delete params[param];
+            }
+         }
+    }
+
+    // process JSON params
+    for( var param in params )
+    {
+         if (params.hasOwnProperty(param))
+         {
+            if (params[param] !== '' && jsonParams[param] == 'true' )
+            {
+                params[param] = JSON.parse(params[param]);
             }
          }
     }
@@ -549,7 +562,7 @@ function processRequest(req, res, next) {
         };
 
     if (['POST','DELETE','PUT'].indexOf(httpMethod) !== -1) {
-        var requestBody = query.stringify(params);
+        var requestBody = JSON.stringify(params);
     }
 
     if (apiConfig.oauth) {

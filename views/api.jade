@@ -135,6 +135,11 @@ block content
                                                                              option(value=choice, selected=true) #{choice}
                                                                      - else
                                                                              option(value=choice) #{choice}
+                                                        - else if (parameter.Type =='json')
+                                                            textarea(name='params[' + parameter.Name + ']', placeholder=className, class='jsonTextarea') 
+                                                              !=JSON.stringify(parameter.Default)
+                                                            input(type='hidden', name='locations['+parameter.Name+']', value=parameter.Location || 'query')
+                                                            input(type='hidden', name='jsonParams['+parameter.Name+']', value='true' || 'query')
                                                         - else
                                                             input(name='params[' + parameter.Name + ']', value=parameter.Default, placeholder=className)
                                                             input(type='hidden', name='locations['+parameter.Name+']', value=parameter.Location || 'query')
